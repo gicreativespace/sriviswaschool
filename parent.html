@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Parent App — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;--sv-blue:#005799;--sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
+  --muted:#607789;--border:rgba(0,43,74,0.10);
+  --wa-green:#25D366;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
+  background:radial-gradient(circle at 10% 10%,rgba(46,131,198,0.12),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(0,146,63,0.07),transparent 28%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 50%,#EEF5FA 100%);
+  overflow-x:hidden;padding-top:var(--safe-top);}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* HEADER */
+.header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;}
+.header-logo{width:42px;height:42px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;}
+.header-logo-fb{width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#005799,#002B4A);color:#fff;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-blue);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+/* CONTAINER */
+.container{flex:1;max-width:600px;width:100%;margin:0 auto;padding:24px 20px 40px;}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 16px;}
+.hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
+  background:linear-gradient(135deg,var(--sv-navy),var(--sv-blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
+.hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
+.card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-green);}
+
+/* FORM */
+.field{margin-bottom:14px;}
+.field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;}
+.field-input,.field-select{width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
+.field-input:focus,.field-select:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,87,153,0.30);}
+.btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+
+/* KIDS LIST */
+.kid-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:18px;
+  display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.25s;
+  margin-bottom:12px;}
+.kid-card:hover{border-color:var(--sv-blue);transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,43,74,0.10);}
+.kid-avatar{width:56px;height:56px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;font-weight:800;font-size:22px;
+  display:flex;align-items:center;justify-content:center;}
+.kid-info{flex:1;min-width:0;}
+.kid-name{font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:3px;}
+.kid-meta{font-size:11.5px;color:var(--muted);font-weight:500;}
+.kid-arrow{color:var(--sv-blue);font-size:20px;}
+
+/* STUDENT PROFILE */
+.student-profile{background:linear-gradient(135deg,#002B4A 0%,#124f6b 100%);
+  color:#fff;border-radius:20px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.student-profile::before{content:"";position:absolute;top:-30px;right:-30px;
+  width:140px;height:140px;border-radius:50%;background:rgba(255,193,7,0.10);}
+.sp-inner{display:flex;align-items:center;gap:16px;position:relative;z-index:2;}
+.sp-photo{width:72px;height:72px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,#FFC107,#E0A800);
+  display:flex;align-items:center;justify-content:center;font-size:32px;
+  font-weight:800;color:#002B4A;border:2px solid rgba(255,255,255,0.3);}
+.sp-info{flex:1;min-width:0;}
+.sp-name{font-family:"Playfair Display",serif;font-size:20px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:4px;}
+.sp-class{font-size:12px;font-weight:700;color:var(--sv-gold-light);letter-spacing:1px;text-transform:uppercase;}
+.sp-meta{display:flex;gap:14px;margin-top:8px;font-size:11px;color:rgba(255,255,255,0.75);flex-wrap:wrap;}
+.sp-meta span{display:flex;align-items:center;gap:4px;}
+
+/* TILES */
+.tiles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.tile{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 8px;
+  text-align:center;cursor:pointer;transition:all 0.22s;}
+.tile:hover{transform:translateY(-3px);border-color:var(--sv-blue);
+  box-shadow:0 10px 22px rgba(0,43,74,0.10);}
+.tile-icon{width:40px;height:40px;margin:0 auto 8px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;}
+.tile-icon.blue{background:linear-gradient(135deg,#005799,#002B4A);}
+.tile-icon.green{background:linear-gradient(135deg,#00923F,#22a35f);}
+.tile-icon.gold{background:linear-gradient(135deg,#FFC107,#E0A800);color:#002B4A;}
+.tile-icon.red{background:linear-gradient(135deg,#dc3545,#b02a37);}
+.tile-icon.purple{background:linear-gradient(135deg,#6f42c1,#8250df);}
+.tile-label{font-size:10.5px;font-weight:700;color:var(--sv-navy);line-height:1.2;}
+
+/* SECTION */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-head h3{font-size:14px;font-weight:800;color:var(--sv-navy);display:flex;align-items:center;gap:8px;}
+.section-head .badge{background:rgba(0,146,63,0.12);color:var(--sv-green);font-size:10px;
+  font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;}
+
+.diary-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--sv-blue);
+  border-radius:14px;padding:16px;margin-bottom:10px;}
+.diary-date{font-size:10.5px;font-weight:800;color:var(--sv-blue);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;}
+.diary-body{font-size:12.5px;color:var(--muted);line-height:1.6;white-space:pre-wrap;}
+
+.announce-card{background:linear-gradient(135deg,#FFF9E6,#fff);border:1px solid rgba(255,193,7,0.30);
+  border-left:4px solid var(--sv-gold);border-radius:14px;padding:16px;margin-bottom:10px;}
+.announce-card .ann-title{font-size:13px;font-weight:800;color:var(--sv-navy);margin-bottom:4px;}
+.announce-card .ann-meta{font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.announce-card .ann-body{font-size:12px;color:var(--muted);line-height:1.55;}
+
+.empty{padding:32px 20px;text-align:center;color:var(--muted);}
+.empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
+.empty p{font-size:12px;font-weight:600;}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 20px calc(24px + var(--safe-bottom));
+  border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:auto;}
+.footer strong{color:var(--sv-blue);font-weight:800;}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
+  transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);max-width:90vw;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+@media (max-width:480px){
+  .tiles-grid{grid-template-columns:repeat(3,1fr);}
+  .sp-photo{width:64px;height:64px;font-size:28px;}
+  .sp-name{font-size:17px;}
+  .hero h1{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SCREEN 1: REGISTER ===================== -->
+<div class="screen active" id="screen-register">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Parent App</div>
+      <div class="header-sub">Sri Viswa School</div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="hero">
+      <h1>Welcome! 👋</h1>
+      <p>Register your child to view daily diary, announcements, marks and more.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Register Your Child</div>
+
+      <div class="field">
+        <label class="field-label">Child's Full Name</label>
+        <input type="text" id="reg-name" class="field-input" placeholder="e.g. Sanvika" maxlength="40">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Date of Birth</label>
+        <input type="date" id="reg-dob" class="field-input">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Class</label>
+          <select id="reg-class" class="field-select">
+            <option value="">Select</option>
+            <option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option>
+            <option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>X</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Section</label>
+          <select id="reg-section" class="field-select">
+            <option value="">Select</option>
+            <option>A</option><option>B</option><option>C</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Roll Number</label>
+          <input type="text" id="reg-roll" class="field-input" placeholder="10" maxlength="3">
+        </div>
+        <div class="field">
+          <label class="field-label">Admission No</label>
+          <input type="text" id="reg-admno" class="field-input" placeholder="453" maxlength="6">
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="registerChild()">
+        ✓ Save &amp; Continue
+      </button>
+
+      <p style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6;">
+        You can add more children later from your dashboard.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 2: KIDS LIST ===================== -->
+<div class="screen" id="screen-kids">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Welcome Back! 👋</div>
+      <div class="header-sub">Choose Child</div>
+    </div>
+    <button class="header-btn" onclick="showRegister()" title="Add child">➕</button>
+  </div>
+  <div class="container">
+    <div id="kids-list"></div>
+    <button class="btn btn-outline" onclick="showRegister()" style="margin-top:8px;">
+      ➕ Add Another Child
+    </button>
+    <button class="btn btn-outline" onclick="clearAll()" style="margin-top:8px;color:#C62828;border-color:rgba(198,40,40,0.25);">
+      🗑 Clear All Data
+    </button>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 3: DASHBOARD ===================== -->
+<div class="screen" id="screen-dashboard">
+  <div class="header">
+    <button class="header-btn" onclick="showKidsList()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Parent Dashboard</div>
+      <div class="header-sub" id="dash-sub">Student</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">🏠</a>
+  </div>
+  <div class="container">
+
+    <div class="student-profile" id="student-profile"></div>
+
+    <div class="tiles-grid">
+      <div class="tile" onclick="comingSoon('E-Diary')">
+        <div class="tile-icon blue">📔</div>
+        <div class="tile-label">E-Diary</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Notices')">
+        <div class="tile-icon red">📢</div>
+        <div class="tile-label">Notices</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Attendance')">
+        <div class="tile-icon green">✅</div>
+        <div class="tile-label">Attend.</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Marks')">
+        <div class="tile-icon gold">📊</div>
+        <div class="tile-label">Marks</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Timetable')">
+        <div class="tile-icon blue">📅</div>
+        <div class="tile-label">Timetable</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Fees')">
+        <div class="tile-icon gold">💰</div>
+        <div class="tile-label">Fees</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Leave')">
+        <div class="tile-icon purple">📝</div>
+        <div class="tile-label">Leave</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Events')">
+        <div class="tile-icon green">🎉</div>
+        <div class="tile-label">Events</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>📔 Recent E-Diary</h3>
+        <span class="badge" id="diary-count">0</span>
+      </div>
+      <div id="diary-list"><div class="empty"><div class="ico">📭</div><p>No diary entries yet</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>📢 Announcements</h3>
+        <span class="badge" id="ann-count">0</span>
+      </div>
+      <div id="ann-list"><div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div></div>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div>Designed by <strong>Team @Valiass</strong></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ FIREBASE ============ -->
+<script src="./firebase-config.js"></script>
+<script type="module">
+// Initialize Firebase + Firestore
+let FB = { ready:false, db:null, auth:null };
+
+(async function(){
+  try{
+    if(!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey){
+      console.warn("No Firebase config");
+      return;
+    }
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    const db = fsMod.getFirestore(app);
+    const auth = authMod.getAuth(app);
+    FB.db = db; FB.fs = fsMod; FB.auth = auth;
+
+    // Anonymous sign-in (needed for Firestore rules)
+    try { await authMod.signInAnonymously(auth); } catch(e){ console.warn("Anon auth:", e); }
+
+    FB.ready = true;
+    window.dispatchEvent(new Event('fb-ready'));
+    console.log("✅ Firebase ready");
+  } catch(e){
+    console.warn("Firebase init failed:", e);
+  }
+})();
+window.FB = FB;
+
+// Listen for jobs (diary + announcements) — real-time
+window.addEventListener('fb-ready', () => {
+  if(!FB.db) return;
+  const { collection, onSnapshot, query, orderBy, limit } = FB.fs;
+  const jobsRef = collection(FB.db, 'jobs');
+  onSnapshot(jobsRef, (snap) => {
+    const list = [];
+    snap.forEach(d => list.push({ id:d.id, ...d.data() }));
+    list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    window._fbJobs = list;
+    console.log("📥 Jobs:", list.length);
+    if(document.getElementById('screen-dashboard').classList.contains('active')){
+      loadDiary();
+      loadAnnouncements();
+    }
+  }, (err) => console.warn("Jobs listen:", err));
+});
+</script>
+
+<script>
+/* ========== STATE ========== */
+const LS_KEY = "svs_parent_kids_v1";
+let currentKid = null;
+
+/* ========== HELPERS ========== */
+function toast(msg, type){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), 2800);
+}
+window.toast = toast;
+
+function comingSoon(name){ toast("Coming soon: " + name); }
+window.comingSoon = comingSoon;
+
+function getKids(){
+  try { return JSON.parse(localStorage.getItem(LS_KEY)||"[]"); } catch(e){ return []; }
+}
+function saveKids(list){ localStorage.setItem(LS_KEY, JSON.stringify(list)); }
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0});
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+/* ========== REGISTER ========== */
+function registerChild(){
+  const name = document.getElementById("reg-name").value.trim();
+  const dob = document.getElementById("reg-dob").value;
+  const cls = document.getElementById("reg-class").value;
+  const sec = document.getElementById("reg-section").value;
+  const roll = document.getElementById("reg-roll").value.trim();
+  const admno = document.getElementById("reg-admno").value.trim();
+
+  if(!name) return toast("Enter child's name", "error");
+  if(!dob) return toast("Enter date of birth", "error");
+  if(!cls) return toast("Select class", "error");
+  if(!sec) return toast("Select section", "error");
+  if(!roll) return toast("Enter roll number", "error");
+  if(!admno) return toast("Enter admission number", "error");
+
+  const kids = getKids();
+  if(kids.find(k => k.admno === admno)) return toast("This child is already registered", "error");
+
+  kids.push({ name, dob, cls, sec, roll, admno, addedAt: Date.now() });
+  saveKids(kids);
+
+  toast("Child registered ✓", "success");
+  setTimeout(()=>showKidsList(), 600);
+}
+window.registerChild = registerChild;
+
+/* ========== KIDS LIST ========== */
+function showKidsList(){
+  const kids = getKids();
+  if(kids.length === 0){ showRegister(); return; }
+
+  const list = document.getElementById("kids-list");
+  list.innerHTML = kids.map((k, i) => `
+    <div class="kid-card" onclick="openDashboard(${i})">
+      <div class="kid-avatar">${escapeHtml(k.name.charAt(0).toUpperCase())}</div>
+      <div class="kid-info">
+        <div class="kid-name">${escapeHtml(k.name)}</div>
+        <div class="kid-meta">Class ${k.cls}-${k.sec} · Roll ${k.roll} · Adm ${k.admno}</div>
+      </div>
+      <div class="kid-arrow">→</div>
+    </div>
+  `).join("");
+  showScreen("screen-kids");
+}
+window.showKidsList = showKidsList;
+
+function showRegister(){
+  ["reg-name","reg-dob","reg-class","reg-section","reg-roll","reg-admno"].forEach(id=>{
+    document.getElementById(id).value = "";
+  });
+  showScreen("screen-register");
+}
+window.showRegister = showRegister;
+
+/* ========== DASHBOARD ========== */
+function openDashboard(index){
+  const kids = getKids();
+  currentKid = kids[index];
+  if(!currentKid){ return toast("Child not found", "error"); }
+
+  document.getElementById("dash-sub").textContent = `Class ${currentKid.cls}-${currentKid.sec}`;
+
+  const initial = currentKid.name.charAt(0).toUpperCase();
+  document.getElementById("student-profile").innerHTML = `
+    <div class="sp-inner">
+      <div class="sp-photo">${initial}</div>
+      <div class="sp-info">
+        <div class="sp-name">${escapeHtml(currentKid.name)}</div>
+        <div class="sp-class">Class ${currentKid.cls} - ${currentKid.sec}</div>
+        <div class="sp-meta">
+          <span>🎫 Adm: ${currentKid.admno}</span>
+          <span>🔢 Roll: ${currentKid.roll}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  loadDiary();
+  loadAnnouncements();
+  showScreen("screen-dashboard");
+}
+window.openDashboard = openDashboard;
+
+/* ========== DATA LOADERS ========== */
+function getJobs(){
+  return window._fbJobs || [];
+}
+
+function loadDiary(){
+  const jobs = getJobs();
+  const classKey = `${currentKid.cls}-${currentKid.sec}`;
+  const list = jobs.filter(j =>
+    j.status === "approved" &&
+    (j.type === "ediary" || j.type === "diary") &&
+    (j.className === classKey || j.className === currentKid.cls)
+  ).slice(0, 3);
+
+  const el = document.getElementById("diary-list");
+  document.getElementById("diary-count").textContent = list.length;
+
+  if(list.length === 0){
+    el.innerHTML = `<div class="empty"><div class="ico">📭</div><p>No diary entries yet</p></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(j => {
+    const d = j.data || {};
+    const lines = [];
+    const subjects = d.subjects || {};
+    Object.keys(subjects).forEach(sid => {
+      const note = (subjects[sid]||"").trim();
+      if(note) lines.push(`• ${note}`);
+    });
+    const body = lines.join("\n") || "—";
+    return `
+      <div class="diary-card">
+        <div class="diary-date">📅 ${prettyDate(j.date)} · 👩‍🏫 ${escapeHtml(j.teacherName || "Class Teacher")}</div>
+        <div class="diary-body">${escapeHtml(body)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function loadAnnouncements(){
+  const jobs = getJobs();
+  const classKey = `${currentKid.cls}-${currentKid.sec}`;
+  const list = jobs.filter(j =>
+    j.status === "approved" &&
+    j.type === "announce" &&
+    (!j.className || j.className === "" || j.className === classKey || j.className === currentKid.cls)
+  ).slice(0, 3);
+
+  const el = document.getElementById("ann-list");
+  document.getElementById("ann-count").textContent = list.length;
+
+  if(list.length === 0){
+    el.innerHTML = `<div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(j => {
+    const d = j.data || {};
+    return `
+      <div class="announce-card">
+        <div class="ann-title">📢 ${escapeHtml(d.content || "Announcement")}</div>
+        <div class="ann-meta">📅 ${prettyDate(j.date)} · ${j.className ? "Class " + j.className : "School-wide"}</div>
+        ${d.details ? `<div class="ann-body">${escapeHtml(d.details)}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+function prettyDate(iso){
+  if(!iso) return "";
+  const [y,m,d] = String(iso).split("-");
+  if(!y||!m||!d) return iso;
+  return `${d}-${m}-${y}`;
+}
+
+/* ========== RESET ========== */
+function clearAll(){
+  if(!confirm("Clear all registered children from this device?")) return;
+  localStorage.removeItem(LS_KEY);
+  toast("Data cleared", "success");
+  setTimeout(()=>showRegister(), 400);
+}
+window.clearAll = clearAll;
+
+/* ========== INIT ========== */
+(function init(){
+  const kids = getKids();
+  if(kids.length > 0) showKidsList();
+  else showRegister();
+})();
+</script>
+</body>
+</html>

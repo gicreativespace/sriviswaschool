@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Office Desk — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;--sv-blue:#005799;--sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
+  --sv-red:#D32F2F;
+  --muted:#607789;--border:rgba(0,43,74,0.10);
+  --wa-green:#25D366;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
+  background:radial-gradient(circle at 10% 10%,rgba(46,131,198,0.12),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(0,146,63,0.07),transparent 28%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 50%,#EEF5FA 100%);
+  overflow-x:hidden;padding-top:var(--safe-top);}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+.header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;}
+.header-logo{width:42px;height:42px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;}
+.header-logo-fb{width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-blue);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;display:flex;align-items:center;justify-content:center;text-decoration:none;}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+.container{flex:1;max-width:640px;width:100%;margin:0 auto;padding:24px 20px 40px;}
+
+.hero{text-align:center;padding:20px 0 16px;}
+.hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
+  background:linear-gradient(135deg,#00923F,#002B4A);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
+.hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
+.card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-green);}
+
+.field{margin-bottom:14px;}
+.field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;}
+.field-input,.field-select,.field-textarea{width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
+.field-input:focus,.field-select:focus,.field-textarea:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
+.field-textarea{resize:vertical;min-height:70px;line-height:1.5;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;text-decoration:none;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,#00923F,#005f29);color:#fff;
+  box-shadow:0 8px 20px rgba(0,146,63,0.24);}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,146,63,0.34);}
+.btn-blue{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);}
+.btn-gold{background:linear-gradient(135deg,#E0A800,#FFC107);color:#002B4A;
+  box-shadow:0 8px 20px rgba(224,168,0,0.28);}
+.btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+
+/* TILES */
+.tiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px;}
+.tile{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px 14px;
+  text-align:center;cursor:pointer;transition:all 0.25s;}
+.tile:hover{transform:translateY(-3px);border-color:var(--sv-green);
+  box-shadow:0 12px 28px rgba(0,146,63,0.14);}
+.tile-icon{width:52px;height:52px;margin:0 auto 10px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;
+  box-shadow:0 6px 16px rgba(0,43,74,0.14);}
+.tile-icon.green{background:linear-gradient(135deg,#00923F,#22a35f);}
+.tile-icon.blue{background:linear-gradient(135deg,#005799,#002B4A);}
+.tile-icon.gold{background:linear-gradient(135deg,#FFC107,#E0A800);color:#002B4A;}
+.tile-icon.purple{background:linear-gradient(135deg,#6f42c1,#8250df);}
+.tile-label{font-size:13px;font-weight:800;color:var(--sv-navy);line-height:1.2;}
+.tile-desc{font-size:10.5px;color:var(--muted);font-weight:600;margin-top:3px;}
+
+/* STUDENT LIST */
+.student-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;
+  margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.student-avatar{width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;font-weight:800;font-size:18px;
+  display:flex;align-items:center;justify-content:center;}
+.student-info{flex:1;min-width:0;}
+.student-name{font-size:14px;font-weight:800;color:var(--sv-navy);margin-bottom:2px;}
+.student-meta{font-size:11px;color:var(--muted);font-weight:500;}
+
+.empty{padding:32px 20px;text-align:center;color:var(--muted);}
+.empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
+.empty p{font-size:12px;font-weight:600;}
+
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.section-head h3{font-size:15px;font-weight:800;color:var(--sv-navy);}
+.badge{background:rgba(0,146,63,0.12);color:var(--sv-green);font-size:11px;
+  font-weight:800;padding:4px 12px;border-radius:20px;}
+
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
+  transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);max-width:90vw;text-align:center;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+.footer{text-align:center;padding:24px 20px calc(24px + var(--safe-bottom));
+  border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:auto;}
+.footer strong{color:var(--sv-blue);font-weight:800;}
+
+@media (max-width:480px){
+  .hero h1{font-size:26px;}
+  .field-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<div class="screen active" id="screen-login">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Office Desk</div>
+      <div class="header-sub">Sri Viswa School</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+    <div class="hero">
+      <h1>Office Login 🏢</h1>
+      <p>Enter the access code to manage students, fees and announcements.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Secret Code</div>
+
+      <div class="field">
+        <label class="field-label">Access Code</label>
+        <input type="password" id="login-code" class="field-input"
+               placeholder="Enter access code" style="letter-spacing:2px;font-weight:700;"
+               onkeydown="if(event.key==='Enter')doLogin()" autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" onclick="doLogin()">
+        🔐 Unlock Desk
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 2: DASHBOARD ===================== -->
+<div class="screen" id="screen-dashboard">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Office Desk</div>
+      <div class="header-sub" id="dash-sub">Admin Center</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+    <button class="header-btn" onclick="logout()" title="Logout">↩</button>
+  </div>
+  <div class="container">
+
+    <div class="card" style="background:linear-gradient(135deg,#00923F,#005f29);color:#fff;border:none;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">
+        Office Desk
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;line-height:1.2;">
+        Admin Center
+      </div>
+      <div style="font-size:11.5px;margin-top:6px;font-weight:600;opacity:0.85;">
+        Sri Viswa School · Palakollu
+      </div>
+    </div>
+
+    <!-- Quick Tiles -->
+    <div class="tiles-grid">
+      <div class="tile" onclick="comingSoon('Add Student')">
+        <div class="tile-icon green">🎓</div>
+        <div class="tile-label">Students</div>
+        <div class="tile-desc">Add / View</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Fees')">
+        <div class="tile-icon gold">💰</div>
+        <div class="tile-label">Fees</div>
+        <div class="tile-desc">Collect / Track</div>
+      </div>
+      <div class="tile" onclick="openAnnounce()">
+        <div class="tile-icon blue">📢</div>
+        <div class="tile-label">Announce</div>
+        <div class="tile-desc">Send Notice</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Reports')">
+        <div class="tile-icon purple">📊</div>
+        <div class="tile-label">Reports</div>
+        <div class="tile-desc">View / Export</div>
+      </div>
+    </div>
+
+    <!-- Recent Announcements -->
+    <div class="card">
+      <div class="section-head">
+        <h3>📢 Recent Announcements</h3>
+        <span class="badge" id="ann-count">0</span>
+      </div>
+      <div id="ann-list"><div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div></div>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div>Designed by <strong>Team @Valiass</strong></div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 3: ANNOUNCE ===================== -->
+<div class="screen" id="screen-announce">
+  <div class="header">
+    <button class="header-btn" onclick="backDash()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">New Announcement</div>
+      <div class="header-sub">Send to Parents</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Announcement Details</div>
+
+      <div class="field">
+        <label class="field-label">Target</label>
+        <select id="a-target" class="field-select">
+          <option value="">🏫 School-wide (All Classes)</option>
+          <option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option>
+          <option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>X</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Title / Headline</label>
+        <input type="text" id="a-title" class="field-input" placeholder="e.g. Annual Day Celebration" maxlength="80">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Details</label>
+        <textarea id="a-details" class="field-textarea"
+                  placeholder="Full announcement text here..."></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="sendAnnouncement()">
+        📤 Send Announcement
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ FIREBASE ============ -->
+<script src="./firebase-config.js"></script>
+<script type="module">
+let FB = { ready:false, db:null, auth:null, fs:null };
+
+(async function(){
+  try{
+    if(!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return;
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    FB.db = fsMod.getFirestore(app);
+    FB.fs = fsMod;
+    FB.auth = authMod.getAuth(app);
+
+    try { await authMod.signInAnonymously(FB.auth); } catch(e){ console.warn("Anon:", e); }
+
+    FB.ready = true;
+    window.dispatchEvent(new Event('fb-ready'));
+    console.log("✅ Firebase ready");
+  } catch(e){
+    console.warn("Firebase init failed:", e);
+  }
+})();
+window.FB = FB;
+</script>
+
+<script>
+/* ========== STATE ========== */
+const LS_OFFICE = "svs_office_session_v1";
+const SECRET_CODE = "sriviswaschool";
+
+/* ========== HELPERS ========== */
+function toast(msg, type){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), 2800);
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0});
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+function prettyDate(iso){
+  if(!iso) return "";
+  const [y,m,d] = String(iso).split("-");
+  if(!y||!m||!d) return iso;
+  return `${d}-${m}-${y}`;
+}
+
+function comingSoon(name){ toast("Coming soon: " + name); }
+window.comingSoon = comingSoon;
+
+/* ========== LOGIN ========== */
+function doLogin(){
+  const code = document.getElementById("login-code").value.trim();
+  if(!code) return toast("Enter access code", "error");
+  if(code !== SECRET_CODE) return toast("Invalid access code", "error");
+
+  localStorage.setItem(LS_OFFICE, JSON.stringify({ loginAt: Date.now() }));
+  toast("Welcome ✓", "success");
+  setTimeout(goDash, 500);
+}
+window.doLogin = doLogin;
+
+function logout(){
+  if(!confirm("Logout from Office Desk?")) return;
+  localStorage.removeItem(LS_OFFICE);
+  document.getElementById("login-code").value = "";
+  showScreen("screen-login");
+}
+window.logout = logout;
+
+/* ========== DASHBOARD ========== */
+function goDash(){
+  showScreen("screen-dashboard");
+  loadAnnouncements();
+}
+window.goDash = goDash;
+
+function backDash(){ goDash(); }
+window.backDash = backDash;
+
+/* ========== ANNOUNCE ========== */
+function openAnnounce(){
+  document.getElementById("a-target").value = "";
+  document.getElementById("a-title").value = "";
+  document.getElementById("a-details").value = "";
+  showScreen("screen-announce");
+}
+window.openAnnounce = openAnnounce;
+
+async function sendAnnouncement(){
+  const target = document.getElementById("a-target").value;
+  const title = document.getElementById("a-title").value.trim();
+  const details = document.getElementById("a-details").value.trim();
+
+  if(!title) return toast("Enter title", "error");
+  if(!details) return toast("Enter details", "error");
+
+  if(!FB.ready || !FB.db){
+    return toast("Firebase not ready", "error");
+  }
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = "Sending...";
+
+  try {
+    const { collection, addDoc, serverTimestamp } = FB.fs;
+    const jobsRef = collection(FB.db, "jobs");
+
+    const today = new Date();
+    const dateStr = today.toISOString().slice(0,10);
+
+    await addDoc(jobsRef, {
+      type: "announce",
+      className: target || "",
+      date: dateStr,
+      postedBy: "office",
+      data: {
+        content: title,
+        details: details
+      },
+      status: "approved",
+      createdAt: Date.now(),
+      submittedAt: serverTimestamp()
+    });
+
+    toast("Announcement sent ✓", "success");
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = "📤 Send Announcement";
+      goDash();
+    }, 700);
+  } catch(e){
+    console.error(e);
+    toast("Send failed: " + e.message, "error");
+    btn.disabled = false;
+    btn.textContent = "📤 Send Announcement";
+  }
+}
+window.sendAnnouncement = sendAnnouncement;
+
+/* ========== LOAD ANNOUNCEMENTS ========== */
+function loadAnnouncements(){
+  if(!FB.ready || !FB.db) return;
+  const { collection, onSnapshot } = FB.fs;
+  const jobsRef = collection(FB.db, "jobs");
+
+  onSnapshot(jobsRef, (snap) => {
+    const list = [];
+    snap.forEach(d => {
+      const j = { id:d.id, ...d.data() };
+      if(j.type === "announce") list.push(j);
+    });
+    list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+    const el = document.getElementById("ann-list");
+    document.getElementById("ann-count").textContent = list.length;
+
+    if(list.length === 0){
+      el.innerHTML = `<div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div>`;
+      return;
+    }
+
+    el.innerHTML = list.slice(0, 5).map(j => {
+      const d = j.data || {};
+      return `
+        <div style="border-left:4px solid var(--sv-gold);background:#FFF9E6;
+                    border-radius:12px;padding:12px 14px;margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:800;color:var(--sv-navy);margin-bottom:3px;">
+            📢 ${escapeHtml(d.content || "Announcement")}
+          </div>
+          <div style="font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:5px;">
+            📅 ${prettyDate(j.date)} · ${j.className ? "Class " + j.className : "School-wide"}
+          </div>
+          ${d.details ? `<div style="font-size:11.5px;color:var(--muted);line-height:1.5;">${escapeHtml(d.details)}</div>` : ""}
+        </div>
+      `;
+    }).join("");
+  });
+}
+
+/* ========== INIT ========== */
+(function init(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_OFFICE) || "null");
+    if(saved){
+      setTimeout(goDash, 300);
+      return;
+    }
+  } catch(e){}
+  showScreen("screen-login");
+})();
+</script>
+</body>
+</html>

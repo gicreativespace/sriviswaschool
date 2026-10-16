@@ -1,4 +1,5 @@
 // firebase-config.js
+// Sri Viswa School Management System
 window.FIREBASE_CONFIG = {
   apiKey: "AIzaSyCXSwuIp3XSrgdOu7AFyQfNIfR1qUkuIbQ",
   authDomain: "sriviswaschool-6236f.firebaseapp.com",

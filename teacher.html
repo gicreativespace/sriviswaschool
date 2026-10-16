@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Teacher Desk — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;--sv-blue:#005799;--sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
+  --muted:#607789;--border:rgba(0,43,74,0.10);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
+  background:radial-gradient(circle at 10% 10%,rgba(46,131,198,0.12),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(0,146,63,0.07),transparent 28%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 50%,#EEF5FA 100%);
+  overflow-x:hidden;padding-top:var(--safe-top);}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* HEADER */
+.header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;}
+.header-logo{width:42px;height:42px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;}
+.header-logo-fb{width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#005799,#002B4A);color:#fff;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-blue);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;display:flex;align-items:center;justify-content:center;text-decoration:none;}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+/* CONTAINER */
+.container{flex:1;max-width:600px;width:100%;margin:0 auto;padding:24px 20px 40px;}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 16px;}
+.hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
+  background:linear-gradient(135deg,var(--sv-navy),var(--sv-blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
+.hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
+.card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-green);}
+
+/* FORM */
+.field{margin-bottom:14px;}
+.field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;}
+.field-input,.field-select,.field-textarea{width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
+.field-input:focus,.field-select:focus,.field-textarea:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
+.field-textarea{resize:vertical;min-height:60px;line-height:1.5;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;text-decoration:none;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,87,153,0.30);}
+.btn-send{background:linear-gradient(135deg,var(--sv-navy),#001c33);color:#fff;
+  box-shadow:0 8px 20px rgba(0,43,74,0.28);padding:16px 22px;font-size:14px;}
+.btn-send:hover{box-shadow:0 14px 32px rgba(0,43,74,0.36);}
+.btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+
+/* SUBJECT BLOCK */
+.subject-block{background:#F8FBFF;border:1.5px solid rgba(0,87,153,0.15);
+  border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.subject-label{font-size:11px;font-weight:800;color:var(--sv-blue);letter-spacing:0.8px;
+  text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.subject-label .snum{width:20px;height:20px;border-radius:6px;background:var(--sv-blue);
+  color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;}
+.subject-input{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid rgba(0,43,74,0.10);
+  background:#fff;font-family:inherit;font-size:13px;color:var(--sv-navy);transition:all 0.2s;resize:vertical;min-height:44px;line-height:1.45;}
+.subject-input:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 3px rgba(0,87,153,0.10);}
+
+/* STATUS CARDS */
+.status-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--sv-gold);
+  border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.status-card.approved{border-left-color:var(--sv-green);}
+.status-card.rejected{border-left-color:#D32F2F;}
+.status-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.status-date{font-size:12px;font-weight:800;color:var(--sv-navy);}
+.status-badge{font-size:9.5px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;}
+.badge-pending{background:rgba(224,168,0,0.15);color:#9a7300;}
+.badge-approved{background:rgba(0,146,63,0.12);color:var(--sv-green);}
+.badge-rejected{background:rgba(211,47,47,0.12);color:#D32F2F;}
+.status-body{font-size:11.5px;color:var(--muted);line-height:1.5;}
+
+.empty{padding:32px 20px;text-align:center;color:var(--muted);}
+.empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
+.empty p{font-size:12px;font-weight:600;}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 20px calc(24px + var(--safe-bottom));
+  border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:auto;}
+.footer strong{color:var(--sv-blue);font-weight:800;}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
+  transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);max-width:90vw;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+@media (max-width:480px){
+  .hero h1{font-size:26px;}
+  .field-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<div class="screen active" id="screen-login">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Teacher Desk</div>
+      <div class="header-sub">Sri Viswa School</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+    <div class="hero">
+      <h1>Teacher Login 👨‍🏫</h1>
+      <p>Enter your credentials to access the diary entry system.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Sign In</div>
+
+      <div class="field">
+        <label class="field-label">Teacher Name</label>
+        <input type="text" id="login-name" class="field-input" placeholder="e.g. Mrs. Lakshmi" maxlength="40">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Password</label>
+        <input type="password" id="login-pass" class="field-input" placeholder="Password">
+      </div>
+
+      <button class="btn btn-primary" onclick="doLogin()">
+        → Login
+      </button>
+
+      <p style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6;">
+        <strong>Demo mode:</strong> Any name + any password works. Real login coming soon.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 2: TEACHER HOME ===================== -->
+<div class="screen" id="screen-home">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Teacher Desk</div>
+      <div class="header-sub" id="home-sub">Welcome</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+    <button class="header-btn" onclick="logout()" title="Logout">↩</button>
+  </div>
+  <div class="container">
+
+    <div class="card" style="background:linear-gradient(135deg,#002B4A,#124f6b);color:#fff;border:none;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--sv-gold-light);margin-bottom:6px;">
+        Welcome back
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;line-height:1.2;" id="home-name">Teacher</div>
+      <div style="font-size:11.5px;color:rgba(255,255,255,0.7);margin-top:6px;">Ready to write today's diary?</div>
+    </div>
+
+    <button class="btn btn-primary" onclick="startNewDiary()" style="padding:16px;font-size:14px;margin-bottom:18px;">
+      📝 New Diary Entry
+    </button>
+
+    <div class="card">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="font-size:14px;font-weight:800;color:var(--sv-navy);display:flex;align-items:center;gap:8px;">
+          📋 My Submitted Diaries
+        </h3>
+        <span style="background:rgba(0,146,63,0.12);color:var(--sv-green);font-size:10px;
+          font-weight:800;padding:3px 10px;border-radius:20px;" id="my-count">0</span>
+      </div>
+      <div id="my-list"><div class="empty"><div class="ico">📭</div><p>No diary submitted yet</p></div></div>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div>Designed by <strong>Team @Valiass</strong></div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 3: NEW DIARY ===================== -->
+<div class="screen" id="screen-new">
+  <div class="header">
+    <button class="header-btn" onclick="backHome()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">New Diary Entry</div>
+      <div class="header-sub" id="new-sub">Class —</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Class Details</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Class</label>
+          <select id="d-class" class="field-select" onchange="updateSubjects()">
+            <option value="">Select</option>
+            <option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option>
+            <option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>X</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Section</label>
+          <select id="d-section" class="field-select">
+            <option value="">Select</option>
+            <option>A</option><option>B</option><option>C</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Date</label>
+        <input type="date" id="d-date" class="field-input">
+      </div>
+    </div>
+
+    <div class="card" id="subjects-card" style="display:none;">
+      <div class="card-title"><span class="dot"></span> Subject Entries</div>
+      <div id="subjects-list"></div>
+
+      <div class="field" style="margin-top:8px;">
+        <label class="field-label">✍️ Homework (Optional)</label>
+        <textarea id="d-homework" class="field-textarea" placeholder="e.g. Maths Ex 3.2 complete చేయండి"></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-send" id="send-btn" onclick="sendToPrincipal()" style="display:none;">
+      📤 Send to Principal Desk
+    </button>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ FIREBASE ============ -->
+<script src="./firebase-config.js"></script>
+<script type="module">
+let FB = { ready:false, db:null, auth:null, fs:null };
+
+(async function(){
+  try{
+    if(!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return;
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    FB.db = fsMod.getFirestore(app);
+    FB.fs = fsMod;
+    FB.auth = authMod.getAuth(app);
+
+    try { await authMod.signInAnonymously(FB.auth); } catch(e){ console.warn("Anon:", e); }
+
+    FB.ready = true;
+    console.log("✅ Firebase ready");
+  } catch(e){
+    console.warn("Firebase init failed:", e);
+  }
+})();
+window.FB = FB;
+</script>
+
+<script>
+/* ========== STATE ========== */
+const LS_TEACHER = "svs_teacher_session_v1";
+let teacher = null;
+
+/* ========== SUBJECT MAP ========== */
+const SUBJECTS_BY_GROUP = {
+  primary:      ["Telugu", "Hindi", "English", "Maths", "EVS", "Computers"],
+  middle:       ["Telugu", "Hindi", "English", "Maths", "GS", "Social", "Computers", "Vedic Maths"],
+  upperMiddle:  ["Telugu", "Hindi", "English", "Maths", "GS", "Social"],
+  highSchool:   ["Telugu", "Hindi", "English", "Maths", "Social", "Physics", "Biology"]
+};
+
+function getGroup(cls){
+  if(["I","II"].includes(cls)) return "primary";
+  if(["III","IV","V"].includes(cls)) return "middle";
+  if(["VI","VII"].includes(cls)) return "upperMiddle";
+  if(["VIII","IX","X"].includes(cls)) return "highSchool";
+  return "upperMiddle";
+}
+
+/* ========== HELPERS ========== */
+function toast(msg, type){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), 2800);
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0});
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+function todayISO(){
+  const d = new Date();
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,"0"), day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+/* ========== LOGIN ========== */
+function doLogin(){
+  const name = document.getElementById("login-name").value.trim();
+  const pass = document.getElementById("login-pass").value;
+
+  if(!name) return toast("Enter your name", "error");
+  if(!pass) return toast("Enter password", "error");
+
+  teacher = { name, loginAt: Date.now() };
+  localStorage.setItem(LS_TEACHER, JSON.stringify(teacher));
+
+  toast("Welcome, " + name + " ✓", "success");
+  setTimeout(goHome, 500);
+}
+window.doLogin = doLogin;
+
+function logout(){
+  if(!confirm("Logout from Teacher Desk?")) return;
+  localStorage.removeItem(LS_TEACHER);
+  teacher = null;
+  document.getElementById("login-name").value = "";
+  document.getElementById("login-pass").value = "";
+  showScreen("screen-login");
+}
+window.logout = logout;
+
+/* ========== HOME ========== */
+function goHome(){
+  if(!teacher) return showScreen("screen-login");
+  document.getElementById("home-name").textContent = teacher.name;
+  document.getElementById("home-sub").textContent = "Welcome, " + teacher.name.split(" ")[0];
+  loadMyDiaries();
+  showScreen("screen-home");
+}
+window.goHome = goHome;
+
+function backHome(){ goHome(); }
+window.backHome = backHome;
+
+/* ========== NEW DIARY ========== */
+function startNewDiary(){
+  document.getElementById("d-class").value = "";
+  document.getElementById("d-section").value = "";
+  document.getElementById("d-date").value = todayISO();
+  document.getElementById("d-homework").value = "";
+  document.getElementById("subjects-card").style.display = "none";
+  document.getElementById("send-btn").style.display = "none";
+  document.getElementById("new-sub").textContent = "Class —";
+  showScreen("screen-new");
+}
+window.startNewDiary = startNewDiary;
+
+function updateSubjects(){
+  const cls = document.getElementById("d-class").value;
+  const card = document.getElementById("subjects-card");
+  const btn = document.getElementById("send-btn");
+  const sub = document.getElementById("new-sub");
+
+  if(!cls){
+    card.style.display = "none";
+    btn.style.display = "none";
+    sub.textContent = "Class —";
+    return;
+  }
+
+  const group = getGroup(cls);
+  const subjects = SUBJECTS_BY_GROUP[group];
+
+  document.getElementById("subjects-list").innerHTML = subjects.map((s, i) => `
+    <div class="subject-block">
+      <div class="subject-label">
+        <span class="snum">${i+1}</span> ${escapeHtml(s)}
+      </div>
+      <textarea class="subject-input" data-subject="${escapeHtml(s)}"
+        placeholder="Today's ${escapeHtml(s)} portion / activity..."></textarea>
+    </div>
+  `).join("");
+
+  card.style.display = "block";
+  btn.style.display = "flex";
+  sub.textContent = "Class " + cls;
+}
+window.updateSubjects = updateSubjects;
+
+/* ========== SEND TO PRINCIPAL ========== */
+async function sendToPrincipal(){
+  const cls = document.getElementById("d-class").value;
+  const sec = document.getElementById("d-section").value;
+  const date = document.getElementById("d-date").value;
+  const homework = document.getElementById("d-homework").value.trim();
+
+  if(!cls) return toast("Select class", "error");
+  if(!sec) return toast("Select section", "error");
+  if(!date) return toast("Select date", "error");
+
+  // Collect subjects
+  const subjects = {};
+  let filled = 0;
+  document.querySelectorAll(".subject-input").forEach(ta => {
+    const val = ta.value.trim();
+    if(val){
+      subjects[ta.dataset.subject] = val;
+      filled++;
+    }
+  });
+
+  if(filled === 0) return toast("Fill at least one subject", "error");
+
+  if(!FB.ready || !FB.db){
+    return toast("Firebase not ready. Try again.", "error");
+  }
+
+  const btn = document.getElementById("send-btn");
+  btn.disabled = true;
+  btn.textContent = "Sending...";
+
+  try {
+    const { collection, addDoc, serverTimestamp } = FB.fs;
+    const jobsRef = collection(FB.db, "jobs");
+
+    await addDoc(jobsRef, {
+      type: "ediary",
+      className: `${cls}-${sec}`,
+      class: cls,
+      section: sec,
+      date: date,
+      teacherId: "demo-teacher",
+      teacherName: teacher.name,
+      data: {
+        subjects: subjects,
+        homework: homework
+      },
+      status: "pending",
+      createdAt: Date.now(),
+      submittedAt: serverTimestamp()
+    });
+
+    toast("Sent to Principal Desk ✓", "success");
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = "📤 Send to Principal Desk";
+      goHome();
+    }, 800);
+  } catch(e){
+    console.error(e);
+    toast("Send failed: " + e.message, "error");
+    btn.disabled = false;
+    btn.textContent = "📤 Send to Principal Desk";
+  }
+}
+window.sendToPrincipal = sendToPrincipal;
+
+/* ========== MY DIARIES ========== */
+function loadMyDiaries(){
+  if(!FB.ready || !FB.db) return;
+  const { collection, onSnapshot } = FB.fs;
+  const jobsRef = collection(FB.db, "jobs");
+
+  onSnapshot(jobsRef, (snap) => {
+    const list = [];
+    snap.forEach(d => {
+      const j = { id:d.id, ...d.data() };
+      if(j.type === "ediary" && j.teacherName === teacher.name){
+        list.push(j);
+      }
+    });
+    list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+    const el = document.getElementById("my-list");
+    document.getElementById("my-count").textContent = list.length;
+
+    if(list.length === 0){
+      el.innerHTML = `<div class="empty"><div class="ico">📭</div><p>No diary submitted yet</p></div>`;
+      return;
+    }
+
+    el.innerHTML = list.slice(0, 10).map(j => {
+      const status = j.status || "pending";
+      const cls = j.className || j.class || "—";
+      const d = j.data || {};
+      const subjects = d.subjects || {};
+      const subCount = Object.keys(subjects).length;
+
+      let bodyText = "";
+      if(status === "rejected" && j.rejectionHistory && j.rejectionHistory.length){
+        bodyText = "❌ Reason: " + escapeHtml(j.rejectionHistory[j.rejectionHistory.length-1].reason || "");
+      } else {
+        bodyText = `${subCount} subject${subCount!==1?"s":""} · ${d.homework ? "with homework" : "no homework"}`;
+      }
+
+      return `
+        <div class="status-card ${status}">
+          <div class="status-head">
+            <div class="status-date">📅 ${prettyDate(j.date)} · ${escapeHtml(cls)}</div>
+            <span class="status-badge badge-${status}">${status}</span>
+          </div>
+          <div class="status-body">${bodyText}</div>
+        </div>
+      `;
+    }).join("");
+  });
+}
+
+function prettyDate(iso){
+  if(!iso) return "";
+  const [y,m,d] = String(iso).split("-");
+  if(!y||!m||!d) return iso;
+  return `${d}-${m}-${y}`;
+}
+
+/* ========== INIT ========== */
+(function init(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_TEACHER) || "null");
+    if(saved && saved.name){
+      teacher = saved;
+      setTimeout(goHome, 300);
+      return;
+    }
+  } catch(e){}
+  showScreen("screen-login");
+})();
+</script>
+</body>
+</html>
